@@ -1,14 +1,20 @@
 # https://www.moneycontrol.com/stocks/marketinfo/marketcap/bse/index.html
 
 import pandas as pd
-from lxml import html
 import requests
 import unicodecsv as csv
+from lxml import html
+from sqlalchemy import create_engine
+
 
 url = 'https://www.moneycontrol.com/stocks/marketinfo/marketcap/bse/index.html'
 
-out = csv.writer(open('stocks.csv','wb',))
-out.writerow(('company', 'link', 'marketcap'))
+# Opens a csv file in write mode
+# out = csv.writer(open('stocks.csv','wb',))
+# out.writerow(('company', 'link', 'marketcap'))
+
+# Creates an in-memory SQLite database
+engine = create_engine('sqlite://', echo=False)
 
 page = requests.get(url)
 tree = html.fromstring(page.content)
@@ -19,8 +25,15 @@ marketcap = tree.xpath('//table[@class="tbldata14 bdrtpg"]/tr/td[6]/text()')
 
 df = pd.DataFrame({'company':company, 'link':link, 'marketcap':marketcap})
 
-for i, meta in df.iterrows():	
-	out.writerow((meta['company'], meta['link'], meta['marketcap']))
+# Stores data in SQLite DB 
+df.to_sql('companies', con=engine, index=False, if_exists='replace')
+df1 = engine.execute("SELECT * FROM companies").fetchall()
+print df1
+
+
+# Writes df to csv file
+# for i, meta in df.iterrows():	
+# 	out.writerow((meta['company'], meta['link'], meta['marketcap']))
 
 
 
