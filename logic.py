@@ -34,7 +34,7 @@ def scrape_sectors():
 def scrape_companies(sectors_df):
 	""" Scrapes company data fom web and stores in a python dataframe"""
 
-	sectors_df = sectors_df.head(2)
+	# sectors_df = sectors_df.head(2)
 	main_df_list = []
 
 	for i, meta in sectors_df.iterrows():
