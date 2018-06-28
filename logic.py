@@ -3,6 +3,7 @@
 import pandas as pd
 import requests
 import string
+from decimal import Decimal
 from lxml import html
 from sqlalchemy import create_engine
 
@@ -111,7 +112,18 @@ def main():
 	remove_duplicates_db(result_df)
 	insert_to_db(result_df)
 
-	
+	# Pandas queries
+	# 3rd and 4th highest market cap companies sector wise.
+	uniq_sectors = result_df.sector.unique()
+	main_list = []
+	for sector in uniq_sectors:
+		test_df = result_df[result_df.sector == sector]
+		test_df.loc[:]['marketcap'] = test_df['marketcap'].apply(lambda x: Decimal(string.replace(x, ',', '')))
+		sorted_df = test_df.sort_values('marketcap', ascending = False).reset_index()
+		df_3_4 = sorted_df.loc[2:3][['sector', 'company', 'marketcap']]
+		main_list.append(df_3_4)
+	main_df = pd.concat(main_list)
+	print main_df
 
 
 if __name__ == "__main__":
