@@ -123,7 +123,19 @@ def main():
 		df_3_4 = sorted_df.loc[2:3][['sector', 'company', 'marketcap']]
 		main_list.append(df_3_4)
 	main_df = pd.concat(main_list)
+	print "3rd and 4th highest market cap companies sector wise."
 	print main_df
+    
+    # Bucket P/E ratios in interval of 5, 11-15,16-20,21-25,...,66-70
+	bucket_df = result_df	
+	bucket_df.loc[:]['pe_ratio'] = bucket_df['pe_ratio'].apply(lambda x: Decimal(string.replace(x, ',', '')))
+	num = []
+	[num.append(i) for i in range(0, 75, 5)]	
+	bucket_df['range'] = pd.cut(bucket_df.pe_ratio, num , right=False)
+	print "\n"
+	print "Bucket P/E ratios in interval of 5, 11-15,16-20,21-25,...,66-70"
+	print bucket_df[['sector', 'company', 'pe_ratio', 'range']] 
+
 
 
 if __name__ == "__main__":
