@@ -7,6 +7,7 @@ from lxml import html
 from sqlalchemy import create_engine
 
 base_url = 'https://www.moneycontrol.com'
+base_companies = ['Carborundum', 'NALCO', 'Century Extr' , 'PG Foils']
 
 
 def connect_db():
@@ -45,24 +46,30 @@ def scrape_companies(sectors_df):
 		marketcap = tree.xpath('//table[@class="tbldata14 bdrtpg"]/tr/td[6]/text()')
 
 		df = pd.DataFrame({'company':company, 'link':link, 'sector':meta['sector'], 'marketcap':marketcap})
+		df = df[df['company'].isin (base_companies)]
 		main_df_list.append(df)
 
 	main_df = pd.concat(main_df_list)
-	print main_df
+	return main_df
 
-def scrape_web():
-	""" Scrapes data fom web and stores in a python dataframe"""
-	url = 'https://www.moneycontrol.com/stocks/marketinfo/marketcap/bse/index.html'
+def scrape_metrics(company_df):
+	""" Scrapes relevant metrics for companies """
 
-	page = requests.get(url)
-	tree = html.fromstring(page.content)
+	main_df_list = []
 
-	company = tree.xpath('//table[@class="tbldata14 bdrtpg"]/tr/td[1]/a/b/text()')
-	link = tree.xpath('//table[@class="tbldata14 bdrtpg"]/tr/td[1]/a/@href')
-	marketcap = tree.xpath('//table[@class="tbldata14 bdrtpg"]/tr/td[6]/text()')
+	for i, meta in company_df.iterrows():
+		url = base_url + meta['link']
+		page = requests.get(url)
+		tree = html.fromstring(page.content)
 
-	df = pd.DataFrame({'company':company, 'link':link, 'marketcap':marketcap})
-	return df
+		pe_ratio = tree.xpath('//*[@id="mktdet_1"]/div[1]/div[2]/div[2]/text()')	
+
+		df = pd.DataFrame({'company':meta['company'], 'pe_ratio': pe_ratio })
+		main_df_list.append(df)
+
+	main_df = pd.concat(main_df_list)
+	return main_df
+
 
 def remove_duplicates_db(df):
 	""" Removes Duplicate records from DB"""
@@ -97,9 +104,12 @@ def insert_to_db(df):
 def main():
 	sectors_df = scrape_sectors()
 	company_df = scrape_companies(sectors_df)
-	df = scrape_web()
-	remove_duplicates_db(df)
-	insert_to_db(df)
+	metric_df = scrape_metrics(company_df)
+	
+	result_df = pd.merge(company_df, metric_df, how='right', on='company')[['company', 'sector', 'marketcap', 'pe_ratio']]
+
+	remove_duplicates_db(result_df)
+	insert_to_db(result_df)
 	
 
 
