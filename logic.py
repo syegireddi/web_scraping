@@ -7,7 +7,7 @@ from lxml import html
 from sqlalchemy import create_engine
 
 base_url = 'https://www.moneycontrol.com'
-base_companies = ['Carborundum', 'NALCO', 'Century Extr' , 'PG Foils']
+base_companies = ['Carborundum', 'Grindwell Norto', 'Wendt', 'Orient Abrasive', 'NALCO', 'Century Extr' , 'PG Foils','Hindalco', 'Manaksia Alumin']
 
 
 def connect_db():
@@ -110,6 +110,7 @@ def main():
 
 	remove_duplicates_db(result_df)
 	insert_to_db(result_df)
+
 	
 
 
