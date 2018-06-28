@@ -20,11 +20,9 @@ Scrapes the Money control site
 **Scraping**
 `
 * The following companies have been shortlisted for extraction
+`base_companies = ['Carborundum', 'Grindwell Norto', 'Wendt', 'Orient Abrasive', 'NALCO', 'Century Extr' , 'PG Foils','Hindalco', 'Manaksia Alumin']`
 * `lxml module` in python has been used for scraping
 * These are stored in a global variable `base_companies` in logic.py file
-* ```
-base_companies = ['Carborundum', 'Grindwell Norto', 'Wendt', 'Orient Abrasive', 'NALCO', 'Century Extr' , 'PG Foils','Hindalco', 'Manaksia Alumin']
-```
 
 **Web Scraping steps:**
 
