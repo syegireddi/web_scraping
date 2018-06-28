@@ -1,8 +1,7 @@
 # web_scraping
 Scrapes the Money control site 
 
-*
-*logic.py file **
+**logic.py file **
 
 * Script for web scraping, and data base insertions is written here
 
