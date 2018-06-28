@@ -1,7 +1,7 @@
 # web_scraping
 Scrapes the Money control site 
 
-**logic.py file **
+**logic.py file**
 
 * Script for web scraping, and data base insertions is written here
 
@@ -9,18 +9,16 @@ Scrapes the Money control site
 
 * SQLite db is used
 * The `connect_db()` function in `logic.py` contains the connection string
-* ```
-engine = create_engine('sqlite:///C:\\Users\\GLP-118\\stocks.db')
-```
+* `engine = create_engine('sqlite:///C:\\Users\\GLP-118\\stocks.db')`
+
 * A table named `companies` is created in database named `stocks` in SQLite with the following schema:
 
-* ```
-CREATE TABLE companies (company TEXT, sector TEXT, marketcap TEXT, pe_ratio TEXT)
-```
+`CREATE TABLE companies (company TEXT, sector TEXT, marketcap TEXT, pe_ratio TEXT)`
+
 * Connection to the db is achieved using **sqlalchemy create engine**
 
 **Scraping**
-
+`
 * The following companies have been shortlisted for extraction
 * `lxml module` in python has been used for scraping
 * These are stored in a global variable `base_companies` in logic.py file
