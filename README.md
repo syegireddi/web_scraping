@@ -1,4 +1,4 @@
-# web_scraping
+# WEB SCRAPING
 Scrapes the Money control site 
 
 **logic.py file**
@@ -54,7 +54,7 @@ new data override old data.
 **Cleansing and metric calculation**
 
 * The data is then cleansed to remove commas and string formatting and the following metrics are computed in pandas
-* * 3rd and 4th highest market cap companies sector wise.
+* 3rd and 4th highest market cap companies sector wise.
 * Bucket P/E ratios in interval of 5, 11-15,16-20,21-25,...,66-70
 
 
